@@ -10,7 +10,7 @@ interface DonationProgressProps {
 }
 
 export function DonationProgress({ donation }: DonationProgressProps) {
-  const progressPercentage = (donation.current_amount / donation.total_amount) * 100;
+  const progressPercentage = (donation.current_amount / donation.target_amount) * 100;
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat('ar-SA').format(num);
   };
@@ -48,7 +48,7 @@ export function DonationProgress({ donation }: DonationProgressProps) {
           </div>
           <div className="flex justify-between text-sm">
             <span className="font-semibold text-gray-800">
-              {formatNumber(donation.total_amount)} ل.س
+              {formatNumber(donation.target_amount)} ل.س
             </span>
             <span className="text-gray-600">المبلغ المطلوب</span>
           </div>
@@ -75,7 +75,7 @@ export function DonationProgress({ donation }: DonationProgressProps) {
         <div className="pt-2 border-t">
           <div className="flex justify-between text-sm text-gray-600">
             <span className="font-semibold text-orange-600">
-              {formatNumber(donation.total_amount - donation.current_amount)} ل.س
+              {formatNumber(donation.target_amount - donation.current_amount)} ل.س
             </span>
             <span>المتبقي</span>
           </div>

@@ -4,7 +4,7 @@ export interface Donation {
   description: string;
   is_verified: boolean;
   current_amount: number;
-  total_amount: number;
+  target_amount: number;
 }
 
 export interface Mosque {
@@ -20,5 +20,6 @@ export interface Mosque {
   city: string;
   size: string;
   establish_year: number;
+  cover_image?: string;
   donations: Donation[];
 }
