@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         port: '3000',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'manara-service.rabeh.sy',
+        pathname: '/**',
+      }
     ],
   },
 };
