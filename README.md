@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# منارة - تطبيق تبرعات المساجد
 
-## Getting Started
+تطبيق ويب مبني بـ Next.js لعرض وإدارة تبرعات المساجد في سوريا.
 
-First, run the development server:
+## المميزات
 
+- **عرض قائمة المساجد**: عرض المساجد في شكل بطاقات مع معلومات مفصلة
+- **عرض الخريطة**: خريطة تفاعلية باستخدام Leaflet و OpenStreetMap مع تركيز على سوريا
+- **صفحة المسجد**: عرض تفاصيل المسجد ومشاريع التبرعات
+- **نظام التبرعات**: عرض مشاريع التبرعات مع شريط التقدم
+- **واجهة عربية**: تصميم RTL كامل باللغة العربية
+- **تصميم متجاوب**: يعمل على جميع الأجهزة
+
+## التقنيات المستخدمة
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Maps**: Leaflet + OpenStreetMap
+- **Icons**: Lucide React
+
+## التثبيت والتشغيل
+
+### المتطلبات
+
+- Node.js 18 أو أحدث
+- npm أو yarn
+
+### خطوات التثبيت
+
+1. تثبيت التبعيات:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. تشغيل التطبيق في وضع التطوير:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. فتح المتصفح على `http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### بناء التطبيق للإنتاج
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## هيكل المشروع
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+manara-client/
+├── app/                    # صفحات Next.js
+│   ├── page.tsx           # الصفحة الرئيسية
+│   └── mosque/[id]/       # صفحة المسجد
+├── components/             # مكونات React
+│   ├── MosqueCard.tsx     # بطاقة المسجد
+│   ├── MosqueMap.tsx      # خريطة المساجد
+│   └── DonationProgress.tsx # شريط تقدم التبرع
+├── lib/                    # مكتبات وبيانات
+│   ├── types.ts           # أنواع TypeScript
+│   └── mock-data.ts       # البيانات التجريبية
+└── public/                 # الملفات العامة
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## البيانات التجريبية
 
-## Deploy on Vercel
+التطبيق يستخدم بيانات تجريبية لـ 5 مساجد في سوريا:
+- جامع الأموي (دمشق)
+- جامع خالد بن الوليد (حمص)
+- جامع النوري (حلب)
+- جامع التوبة (اللاذقية)
+- جامع الحسن (درعا)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## استبدال API التجريبي
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+للاستبدال بـ API حقيقي:
+
+1. تحديث `lib/mock-data.ts` لاستدعاء API حقيقي
+2. إضافة معالجة الأخطاء
+3. إضافة حالات التحميل
+4. تحديث أنواع البيانات حسب API الحقيقي
+
+## النشر على Netlify
+
+1. رفع الكود إلى GitHub
+2. ربط المستودع بـ Netlify
+3. تعيين أمر البناء: `npm run build`
+4. تعيين مجلد النشر: `.next`
+
+## المساهمة
+
+1. Fork المشروع
+2. إنشاء فرع للميزة الجديدة
+3. Commit التغييرات
+4. Push إلى الفرع
+5. إنشاء Pull Request
+
+## الترخيص
+
+هذا المشروع مرخص تحت رخصة MIT.
