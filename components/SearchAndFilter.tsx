@@ -72,9 +72,9 @@ export function SearchAndFilter({ onSearch, onCityFilter, onViewModeChange, sear
           </Button>
         </div>
 
-        {/* City Filter and View Toggle */}
+                {/* City Filter and View Toggle */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-          {/* City Filter and Reset Button */}
+          {/* City Filter and Reset Button Row */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex items-center gap-2 text-gray-600">
               <Filter className="w-4 h-4" />
@@ -96,22 +96,22 @@ export function SearchAndFilter({ onSearch, onCityFilter, onViewModeChange, sear
                   {city.name}
                 </Button>
               ))}
-            </div>
-            
-            {/* Clear Filters Button - Next to filters */}
-            {(searchQuery || selectedCity !== null) && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                مسح الفلاتر
-              </Button>
-            )}
-          </div>
+               {/* Clear Filters Button - Same row as cities on mobile */}
+               {(searchQuery || selectedCity !== null) && (
+                 <Button
+                   variant="ghost"
+                   size="sm"
+                   onClick={clearFilters}
+                   className="text-gray-500 hover:text-gray-700 self-start sm:self-center"
+                 >
+                   مسح الفلاتر
+                 </Button>
+               )}
+             </div>
+             
+           </div>
 
-          {/* View Mode Toggle - Positioned to the left */}
+          {/* View Mode Toggle - Right aligned on mobile, left on desktop */}
           <div className="flex items-center gap-2 ml-auto">
             <div className="flex bg-white rounded-lg shadow-md p-1">
               <button

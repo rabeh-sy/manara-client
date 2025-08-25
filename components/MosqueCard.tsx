@@ -3,7 +3,7 @@
 import { Mosque } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Building } from 'lucide-react';
+import { Building, MapPin, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -51,14 +51,16 @@ export function MosqueCard({ mosque }: MosqueCardProps) {
           {truncateDescription(mosque.description)}
         </p>
         
-        <div className="text-sm text-gray-600" style={{ textAlign: 'right' }}>
-          {mosque.address}
+        <div className="flex items-center gap-2 text-sm text-gray-600" style={{ textAlign: 'right' }}>
+          <MapPin className="w-4 h-4 text-[#103935] flex-shrink-0" />
+          <span>{mosque.address}</span>
         </div>
         
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">
-            التبرعات المفتوحة: {mosque.donations_count}
-          </span>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Heart className="w-4 h-4 text-[#103935] flex-shrink-0" />
+            <span>التبرعات المفتوحة: {mosque.donations_count}</span>
+          </div>
           <Link href={`/mosque/${mosque.id}`}>
             <Button size="sm" className="bg-[#103935] hover:bg-[#0a2a27]">
               عرض التفاصيل
