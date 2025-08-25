@@ -1,100 +1,122 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { Metadata } from 'next';
 import { Mosque } from '@/lib/types';
 import { fetchMosqueById } from '@/lib/api';
 import { DonationProgress } from '@/components/DonationProgress';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Users, Calendar, Building } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-export default function MosquePage() {
-  const params = useParams();
-  const [mosque, setMosque] = useState<Mosque | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface Props {
+  params: Promise<{ id: string }>;
+}
 
-  useEffect(() => {
-    const loadMosque = async () => {
-      if (!params.id) return;
-      
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await fetchMosqueById(params.id as string);
-        setMosque(data);
-      } catch (err) {
-        setError('فشل في تحميل بيانات المسجد. يرجى المحاولة مرة أخرى.');
-        console.error('Failed to load mosque:', err);
-      } finally {
-        setLoading(false);
-      }
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const mosque = await fetchMosqueById(id);
+    
+    if (!mosque) {
+      return {
+        title: 'المسجد غير موجود - منارة',
+        description: 'المسجد المطلوب غير موجود في قاعدة البيانات',
+      };
+    }
+
+    const coverImageUrl = mosque.cover_image 
+      ? `https://manara-service.rabeh.sy${mosque.cover_image}`
+      : undefined;
+
+    return {
+      title: `${mosque.name} - منارة`,
+      description: mosque.description,
+      keywords: `مسجد، ${mosque.name}، ${mosque.city}، تبرعات، سوريا، منارة`,
+      authors: [{ name: "منارة" }],
+      openGraph: {
+        title: `${mosque.name} - منارة`,
+        description: mosque.description,
+        type: "website",
+        locale: "ar",
+        siteName: "منارة",
+        images: coverImageUrl ? [
+          {
+            url: coverImageUrl,
+            width: 1200,
+            height: 630,
+            alt: mosque.name,
+          }
+        ] : undefined,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${mosque.name} - منارة`,
+        description: mosque.description,
+        images: coverImageUrl ? [coverImageUrl] : undefined,
+      },
     };
+  } catch (error) {
+    return {
+      title: 'خطأ في تحميل المسجد - منارة',
+      description: 'حدث خطأ أثناء تحميل بيانات المسجد',
+    };
+  }
+}
 
-    loadMosque();
-  }, [params.id]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#EBE9E0]">
-        <Navbar />
-        <div className="flex items-center justify-center h-96">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#103935] mx-auto"></div>
-            <p className="mt-4 text-gray-600">جاري التحميل...</p>
-          </div>
-        </div>
-      </div>
-    );
+export default async function MosquePage({ params }: Props) {
+  const { id } = await params;
+  let mosque: Mosque;
+  
+  try {
+    mosque = await fetchMosqueById(id);
+  } catch (error) {
+    notFound();
   }
 
-  if (error || (!loading && !mosque)) {
-    return (
-      <div className="min-h-screen bg-[#EBE9E0]">
-        <Navbar />
-        <div className="flex items-center justify-center h-96">
-          <div className="text-center bg-red-50 p-8 rounded-lg border border-red-200">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              {error || 'المسجد غير موجود'}
-            </h1>
-            <div className="space-x-4 space-x-reverse">
-              <Link href="/">
-                <Button className="bg-[#103935] hover:bg-[#0a2a27]">
-                  العودة للصفحة الرئيسية
-                </Button>
-              </Link>
-              {error && (
-                <Button 
-                  variant="outline" 
-                  onClick={() => window.location.reload()}
-                  className="border-[#103935] text-[#103935] hover:bg-[#103935] hover:text-white"
-                >
-                  إعادة المحاولة
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  if (!mosque) {
+    notFound();
   }
 
   const formatNumber = (num: number) => {
-    return new Intl.NumberFormat('ar-SA').format(num);
+    return new Intl.NumberFormat('en-US').format(num);
   };
 
-  // Guard clause - only render if we have mosque data
-  if (!mosque) {
-    return null;
-  }
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "PlaceOfWorship",
+    "name": mosque.name,
+    "description": mosque.description,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": mosque.city,
+      "addressCountry": "SY"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": mosque.latitude,
+      "longitude": mosque.longitude
+    },
+    "image": mosque.cover_image ? `https://manara-service.rabeh.sy${mosque.cover_image}` : undefined,
+    "url": `https://manara.rabeh.sy/mosque/${id}`,
+    "telephone": "+963",
+    "openingHours": "24/7",
+    "amenityFeature": [
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Capacity",
+        "value": mosque.capacity
+      }
+    ]
+  };
 
   return (
     <div className="min-h-screen bg-[#EBE9E0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
@@ -109,23 +131,18 @@ export default function MosquePage() {
                 height={300}
                 className="w-full h-full object-cover"
                 priority={true}
-                onError={(e) => {
-                  // Fallback to icon if image fails to load
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  target.nextElementSibling?.classList.remove('hidden');
-                }}
               />
-            ) : null}
-            <div className={`w-full h-full flex items-center justify-center ${mosque.cover_image ? 'hidden' : ''}`}>
-              <Building className="w-20 h-20 text-[#103935]" />
-            </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <Building className="w-20 h-20 text-[#103935]" />
+              </div>
+            )}
           </div>
           <div className="p-8">
             <div className="flex items-start justify-between mb-6">
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-gray-900 mb-4">{mosque.name}</h1>
-                <p className="text-lg text-gray-600 leading-relaxed mb-6">
+                <p className="text-sm text-gray-600 leading-relaxed mb-6">
                   {mosque.description}
                 </p>
                 
@@ -150,7 +167,7 @@ export default function MosquePage() {
                     <Calendar className="w-5 h-5 text-[#103935]" />
                     <div>
                       <p className="font-semibold text-gray-900">سنة الإنشاء</p>
-                      <p className="text-gray-600">{mosque.establish_year}</p>
+                      <p className="text-gray-600">{formatNumber(mosque.establish_year)}</p>
                     </div>
                   </div>
                 </div>
@@ -164,7 +181,7 @@ export default function MosquePage() {
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900">مشاريع التبرعات</h2>
             <div className="text-sm text-gray-600">
-              {mosque.donations.length} مشروع تبرع
+              {formatNumber(mosque.donations.length)} مشروع تبرع
             </div>
           </div>
 

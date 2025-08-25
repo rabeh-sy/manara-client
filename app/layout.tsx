@@ -11,7 +11,21 @@ const rubik = Rubik({
 
 export const metadata: Metadata = {
   title: "منارة - تطبيق تبرعات المساجد",
-  description: "تطبيق لإدارة وعرض تبرعات المساجد في سوريا",
+  description: "تطبيق لإدارة وعرض تبرعات المساجد في سوريا. ابحث عن المساجد في دمشق، حلب، حمص وغيرها من المدن السورية.",
+  keywords: "مساجد، تبرعات، سوريا، دمشق، حلب، حمص، منارة",
+  authors: [{ name: "منارة" }],
+  openGraph: {
+    title: "منارة - تطبيق تبرعات المساجد",
+    description: "تطبيق لإدارة وعرض تبرعات المساجد في سوريا",
+    type: "website",
+    locale: "ar",
+    siteName: "منارة",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "منارة - تطبيق تبرعات المساجد",
+    description: "تطبيق لإدارة وعرض تبرعات المساجد في سوريا",
+  },
 };
 
 export default function RootLayout({

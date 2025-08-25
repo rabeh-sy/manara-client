@@ -2,10 +2,22 @@ import { Mosque } from './types';
 
 const API_BASE_URL = 'https://manara-service.rabeh.sy';
 
-// Fetch all mosques
-export async function fetchMosques(): Promise<Mosque[]> {
+// Fetch all mosques with search and filter
+export async function fetchMosques(searchQuery?: string, cityFilter?: number | null): Promise<Mosque[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/mosques.json`, {
+    const params = new URLSearchParams();
+    
+    if (searchQuery && searchQuery.trim()) {
+      params.append('q[name_cont]', searchQuery.trim());
+    }
+    
+    if (cityFilter !== undefined && cityFilter !== null && cityFilter >= 0) {
+      params.append('q[city_eq]', cityFilter.toString());
+    }
+
+    const url = `${API_BASE_URL}/mosques.json${params.toString() ? `?${params.toString()}` : ''}`;
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

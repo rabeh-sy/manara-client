@@ -18,7 +18,7 @@ export function Footer() {
           </p>
           <div className="border-t border-gray-600 pt-4">
             <p className="text-sm text-gray-400">
-              © 2024 منارة - إحدى منتجات شركة رابح للتقنية. جميع الحقوق محفوظة
+              منارة - إحدى منتجات شركة رابح للتقنية. جميع الحقوق محفوظة
             </p>
           </div>
         </div>

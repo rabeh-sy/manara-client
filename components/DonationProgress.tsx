@@ -12,7 +12,7 @@ interface DonationProgressProps {
 export function DonationProgress({ donation }: DonationProgressProps) {
   const progressPercentage = (donation.current_amount / donation.target_amount) * 100;
   const formatNumber = (num: number) => {
-    return new Intl.NumberFormat('ar-SA').format(num);
+    return new Intl.NumberFormat('en-US').format(num);
   };
 
   return (

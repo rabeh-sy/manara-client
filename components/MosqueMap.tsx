@@ -38,6 +38,9 @@ const MosqueMapComponent = ({ mosques }: { mosques: Mosque[] }) => {
     // Prevent multiple initializations
     if (mapInitialized.current) return;
 
+    // Wait for mosques data to be available
+    if (!mosques || mosques.length === 0) return;
+
     const initMap = async () => {
       try {
         const L = await import('leaflet');
@@ -79,9 +82,25 @@ const MosqueMapComponent = ({ mosques }: { mosques: Mosque[] }) => {
         setMap(mapInstance);
         mapInitialized.current = true;
 
-        // Add markers for each mosque
+        // Create custom mosque icon
+        const mosqueIcon = L.divIcon({
+          html: `
+            <div class="bg-[#103935] text-white rounded-full p-2 shadow-lg border-2 border-white" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3L4 9v12h16V9l-8-6zM6 19v-9l6-4.5 6 4.5v9H6z"/>
+                <path d="M9 14h2v5H9zM13 14h2v5h-2z"/>
+              </svg>
+            </div>
+          `,
+          className: 'custom-mosque-icon',
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+          popupAnchor: [0, -40]
+        });
+
+        // Add markers for each mosque with custom icon
         const mosqueMarkers = mosques.map(mosque => {
-          const marker = L.marker([mosque.latitude, mosque.longitude])
+          const marker = L.marker([mosque.latitude, mosque.longitude], { icon: mosqueIcon })
             .addTo(mapInstance);
 
           // Show overlay card when marker is clicked
@@ -131,7 +150,7 @@ const MosqueMapComponent = ({ mosques }: { mosques: Mosque[] }) => {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array - only run once
+  }, [mosques]); // Run when mosques data changes
 
   return (
     <div className="relative w-full h-[600px]">
