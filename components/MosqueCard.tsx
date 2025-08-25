@@ -41,7 +41,7 @@ export function MosqueCard({ mosque }: MosqueCardProps) {
           <Building className="w-16 h-16 text-[#103935]" />
         </div>
       </div>
-      <CardHeader className="pb-3">
+      <CardHeader>
         <CardTitle className="text-lg font-bold leading-tight" style={{ textAlign: 'right' }}>
           {mosque.name}
         </CardTitle>
