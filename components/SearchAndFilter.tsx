@@ -113,7 +113,6 @@ export function SearchAndFilter({ onSearch, onCityFilter, onViewModeChange, sear
 
           {/* View Mode Toggle - Positioned to the left */}
           <div className="flex items-center gap-2 ml-auto">
-            <span className="text-sm font-medium text-gray-600">عرض:</span>
             <div className="flex bg-white rounded-lg shadow-md p-1">
               <button
                 onClick={() => onViewModeChange('list')}

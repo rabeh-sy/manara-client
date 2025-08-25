@@ -7,6 +7,7 @@ import { MosqueCard } from './MosqueCard';
 // Types for Leaflet
 interface LeafletMap {
   remove: () => void;
+  flyTo: (latlng: [number, number], zoom: number, options?: { duration?: number; easeLinearity?: number }) => void;
 }
 
 interface LeafletMarker {
@@ -24,8 +25,15 @@ declare global {
   }
 }
 
+// City coordinates for zooming
+const cityCoordinates = {
+  0: { lat: 36.2021, lng: 37.1343, name: 'حلب' }, // حلب
+  1: { lat: 33.5138, lng: 36.2765, name: 'دمشق' }, // دمشق
+  2: { lat: 34.7268, lng: 36.7233, name: 'حمص' }, // حمص
+};
+
 // Dynamic imports for Leaflet to avoid SSR issues
-const MosqueMapComponent = ({ mosques }: { mosques: Mosque[] }) => {
+const MosqueMapComponent = ({ mosques, selectedCity }: { mosques: Mosque[], selectedCity: number | null }) => {
   const [selectedMosque, setSelectedMosque] = useState<Mosque | null>(null);
   const [map, setMap] = useState<LeafletMap | null>(null);
   const [markers, setMarkers] = useState<LeafletMarker[]>([]);
@@ -151,6 +159,25 @@ const MosqueMapComponent = ({ mosques }: { mosques: Mosque[] }) => {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mosques]); // Run when mosques data changes
+
+  // Handle city filter changes and zoom to selected city
+  useEffect(() => {
+    if (map && selectedCity !== null && cityCoordinates[selectedCity as keyof typeof cityCoordinates]) {
+      const city = cityCoordinates[selectedCity as keyof typeof cityCoordinates];
+      
+      // Smooth zoom to city with animation
+      map.flyTo([city.lat, city.lng], 10, {
+        duration: 1.5,
+        easeLinearity: 0.25
+      });
+    } else if (map && selectedCity === null) {
+      // Reset to Syria overview when no city is selected
+      map.flyTo([34.8021, 38.9968], 7, {
+        duration: 1.5,
+        easeLinearity: 0.25
+      });
+    }
+  }, [selectedCity, map]);
 
   return (
     <div className="relative w-full h-[600px]">

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const coverImageUrl = mosque.cover_image 
-      ? `https://manara-service.rabeh.sy${mosque.cover_image}`
+      ? `${mosque.cover_image}`
       : undefined;
 
     return {

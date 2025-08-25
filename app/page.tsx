@@ -149,7 +149,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="bg-white rounded-lg shadow-lg p-4">
-              <MosqueMapComponent mosques={mosques} />
+              <MosqueMapComponent mosques={mosques} selectedCity={selectedCity} />
             </div>
           )}
         </div>
