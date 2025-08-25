@@ -98,7 +98,7 @@ export default async function MosquePage({ params }: Props) {
       "latitude": mosque.latitude,
       "longitude": mosque.longitude
     },
-    "image": mosque.cover_image ? `https://manara-service.rabeh.sy${mosque.cover_image}` : undefined,
+    "image": mosque.cover_image ? `${mosque.cover_image}` : undefined,
     "url": `https://manara.rabeh.sy/mosque/${id}`,
     "telephone": "+963",
     "openingHours": "24/7",
