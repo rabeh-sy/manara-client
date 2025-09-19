@@ -119,7 +119,7 @@ export default async function MosquePage({ params }: Props) {
       />
       <Navbar />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="h-120 bg-gradient-to-br from-green-100 to-green-200 overflow-hidden">
