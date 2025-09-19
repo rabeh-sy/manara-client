@@ -1,6 +1,6 @@
 import { Mosque } from './types';
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://manara-service.rabeh.sy';
 
 // Fetch all mosques with search and filter
 export async function fetchMosques(searchQuery?: string, cityFilter?: number | null): Promise<Mosque[]> {
